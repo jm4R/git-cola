@@ -130,46 +130,60 @@ class Theme(object):
                 color.lightnessF()*0.6
             )
             lighter_rgb = qtutils.rgb_css(w)
-        else:
-            background = '#edeef3'
-            field = '#ffffff'
-            grayed = '#a2a2b0'
-            button_text = '#ffffff'
-            field_text = '#000000'
-            d = QtGui.QColor.fromHslF(
-                color.hslHueF(),
-                color.hslSaturationF(),
-                color.lightnessF()*0.5
-            )
-            darker_rgb = qtutils.rgb_css(d)
-            w = QtGui.QColor.fromHslF(
-                color.hslHueF(),
-                normalize(color.hslSaturationF()*1.5),
-                normalize(color.lightnessF()*1.5)
-            )
-            lighter_rgb = qtutils.rgb_css(w)
+
+        background = '#edeef3'
+        field = '#ffffff'
+        grayed = '#a2a2b0'
+        button_text = '#ffffff'
+        field_text = '#000000'
+        focus_color = QtGui.QColor.fromHslF(
+            color.hslHueF(),
+            0.3,
+            color.lightnessF()
+        )
+        focus = qtutils.rgb_css(focus_color)
+        button_color = QtGui.QColor.fromHslF(
+            color.hslHueF(),
+            0.35,
+            0.5
+        )
+        button = qtutils.rgb_css(button_color)
+        d = QtGui.QColor.fromHslF(
+            color.hslHueF(),
+            1.0,
+            0.1
+        )
+        darker_rgb = qtutils.rgb_css(d)
+        w = QtGui.QColor.fromHslF(
+            color.hslHueF(),
+            0.75,
+            0.95
+        )
+        lighter_rgb = qtutils.rgb_css(w)
 
         return """
             /* regular widgets */
             * {
                 background-color: %(background)s;
                 color: %(field_text)s;
-                selection-background-color: %(lighter)s;
+                selection-background-color: %(button)s;
                 alternate-background-color: %(field)s;
-                selection-color: %(field_text)s;
                 show-decoration-selected: 1;
                 spacing: 2px;
             }
             QDockWidget > QFrame {
-                margin: 0 8px 2px 8px;
+                margin: 0 6px 2px 6px;
                 min-height: 40px;
             }
             QPlainTextEdit, QLineEdit, QTextEdit, QAbstractItemView,
             QStackedWidget, QAbstractSpinBox {
                 background-color: %(field)s;
-                border-color: %(darker)s;
+                border-color: %(grayed)s;
                 border-style: solid;
                 border-width: 1px;
+            }
+            QWidget:focus {
+                border-color: %(focus)s;
             }
             QStackedWidget QFrame {
                 border-width: 0;
@@ -194,11 +208,11 @@ class Theme(object):
                 padding: 5px 0;
                 border-radius: 0px;
             }
-            QPushButton:hover {
-               background-color: %(darker)s;
+            QPushButton:hover, QPushButton:focus {
+               background-color: %(focus)s;
             }
             QPushButton:pressed {
-                background-color: %(darker)s;
+                background-color: %(focus)s;
                 margin: 1px 1px 2px 1px;
             }
             QPushButton:disabled {
@@ -222,10 +236,10 @@ class Theme(object):
                 background: transparent;
             }
             QMenuBar::item:selected {
-                background: %(lighter)s;
+                background: %(button)s;
             }
             QMenuBar::item:pressed {
-                background: %(lighter)s;
+                background: %(button)s;
             }
             QMenu {
                 background-color: %(field)s;
@@ -436,7 +450,8 @@ class Theme(object):
                        lighter=lighter_rgb,
                        grayed=grayed,
                        button_text=button_text,
-                       field_text=field_text
+                       field_text=field_text,
+                       focus = focus
                        )
 
 
